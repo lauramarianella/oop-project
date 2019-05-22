@@ -25,13 +25,15 @@ let player;
 function run(){
   // init board
   // Create a board with 20 rows and 25 columns (can play around to test different sizes) and render it
-  board = new Board(15, 25);
+  board = new Board(15, 15);
   let root = document.getElementById('board');
   board.render(root);
 
   // init player
   // create player at the center of the board with 2 items and render it
-  player = new Player('HooperCat', board.getCenteredPosition(), board, 1, []);
+  let positionPlayer = board.getCenteredPosition();
+  player = new Player('HooperCat', positionPlayer, board, 1, []);
+  board.setEntity(player,positionPlayer);
   player.render(root);
 }
 
@@ -50,7 +52,21 @@ run();
 // Create all the monsters entities and set them on the board at a random position
 // Give each monster a random name, random level (1-3), a potion (random rarity 0-3), random gold (0-50)
 // Give one monster the key
-for (let i = 0; i < MAX_MONSTERS; i++) {}
+let monstersArray = [];
+for (let i = 0; i < MAX_MONSTERS; i++) {
+  let name = MONSTER_NAMES[getRandom(0, MAX_MONSTERS)];
+  let level = getRandom(1,3);
+  let rarity = getRandom(0,3);
+  let items = [new Potion(rarity)];
+  let gold = getRandom(0,50);
+  monstersArray.push(new Monster(name, level,items, gold));
+  let x = getRandom(1, board.getRowsLength()-2);
+  let y = getRandom(1, board.getColsLength()-2);
+  let positionMonster = new Position(x, y);
+  board.setEntity(monstersArray[i],positionMonster);
+}
+
+board.update();
 
 // items
 // Add code to create a potion and a bomb entity and set them at a random board position
@@ -83,6 +99,7 @@ document.addEventListener('keydown', (ev) => {
 // UPDATE the function to return a random position on the board that is not occupied by an entity (Grass is fine) or the player's initial position (center)
 // The parameter is a Board object
 function getRandomPosition(board) {}
+
 
 // UPDATE the function passed to setInterval to attack the player and trigger player death if hp is 0 or lower
 // The parameter is a Monster object

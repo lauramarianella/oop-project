@@ -26,7 +26,7 @@ class Board{/** Example use:
       - rows (array): 2D Array of rows. Each row is an array of Entity objects.
       - root (HTMLElement) - HTML element in which the board elements are appended
         */
-
+        
         this.rows = [];
         for(let i=0; i< rows; i++){
             this.rows[i] = [];
@@ -61,6 +61,7 @@ class Board{/** Example use:
 
         this.rows.forEach((row,i) => {row.forEach((col,j) => {
             let entity = (col[col.length-1]);
+            //console.log(entity);
             entity.element.style.top = `${ENTITY_SIZE * j}px`;
             entity.element.style.left = `${ENTITY_SIZE * i}px`;
             this.root.appendChild(entity.element);
@@ -73,7 +74,7 @@ class Board{/** Example use:
          - parameters: entity (Entity), position (Position)
         - Sets the Entity object at the specified position and updates the Board (using the update method)*/
         entity.position = position;
-        this.rows[position.row].push(entity);
+        (this.rows[position.row][position.column]).push(entity);
     }
 
     getEntity(position) {/** - getEntity (function)
@@ -84,12 +85,19 @@ class Board{/** Example use:
     }
 
     getCenteredPosition() {
-        let x = Math.floor(this.rows.length/2);
+        let x = Math.floor(this.getRowsLength()/2);
 
-        let y = Math.floor(this.rows[0].length/2);
+        let y = Math.floor(this.getColsLength()/2);
 
         //alert(`x=${x} out of ${this.rows.length} , y=${y} out of ${this.rows[0].length}`);
         return new Position(x,y);
+    }
+
+    getRowsLength(){
+        return this.rows.length;
+    }
+    getColsLength(){
+        return this.rows[0].length;
     }
 
 }
