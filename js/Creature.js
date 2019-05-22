@@ -1,5 +1,6 @@
 //Create the Creature and Monster class
 
+class Creature extends Entity{
 /*
 The Creature class is an Entity. It has the following properties (not including inherited properties):
 - constructor
@@ -24,6 +25,16 @@ The Creature class is an Entity. It has the following properties (not including 
   - sets an attack timeout that expires after attackSpeed. While the timeout is active, this method immediately returns false, else returns true.
 Example use: not used by itself. 
 */
+
+    constructor(name, img, level, items, gold){        
+        super(img);
+        this.name = name;
+        // this.img = img;
+        this.level = level;
+        this.items = items;
+        this.gold = gold;
+    }
+}
 
 /*
 The Monster class is a Creature. It has the following properties (bot including inherited properties):

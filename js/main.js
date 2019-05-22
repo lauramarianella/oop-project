@@ -19,14 +19,29 @@ const sounds = {
 // game state. Is used in the keyboard event listener to prevent user action if game is over
 let GAME_STATE = 'PLAY';
 
-// init board
-// Create a board with 20 rows and 25 columns (can play around to test different sizes) and render it
+let board;
+let player;
 
-// init player
-// create player at the center of the board with 2 items and render it
+function run(){
+  // init board
+  // Create a board with 20 rows and 25 columns (can play around to test different sizes) and render it
+  board = new Board(15, 25);
+  let root = document.getElementById('board');
+  board.render(root);
+
+  // init player
+  // create player at the center of the board with 2 items and render it
+  player = new Player('HooperCat', board.getCenteredPosition(), board, 1, []);
+  player.render(root);
+}
+
+run();
+
+
+
 
 // Keep this, used to display the information on the box on the right of the board
-updateActionCam();
+//updateActionCam();
 
 // board entities
 

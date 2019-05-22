@@ -1,24 +1,46 @@
 //Create the Player class
 
-/*
+class Player extends Creature {/*
 Player class definition. Player is a Creature
 - constructor
   - parameters: name (string), position (Position), board (Board), level (number), items (Item[]), gold (number)
   - Sets the attackSpeed to 2000 / level
   - Sets the exp to 0
   - Sets the position and board
-- attackSpeed (number)
-- exp (number)
-- position (Position)
-- board (Board)
-- render (function)
-  - parameters: root (HTMLElement)
-  - Appends the element to the root (the board HTML element)
-  - Updates the player position
-- update (function)
+
+  - attackSpeed (number)
+  - exp (number)
+  - position (Position)
+  - board (Board)
+*/
+/**Example use:
+new Player('Van', new Position(5, 5), new Board(10, 10), 1, [new Potion(0)]); */
+
+constructor(name, position, board, level, items, gold){
+    let img = 'imgs/player/front.png';
+    super(name, img, level, items, gold);
+    
+    this.attackSpeed = 2000 / level;
+    this.exp = 0;
+    this.position = position;
+    this.board = board;
+}
+
+render(root) {/* - render (function)
+    - parameters: root (HTMLElement)
+    - Appends the element to the root (the board HTML element)
+    - Updates the player position
+    */ 
+    root.appendChild(this.element);
+    this.element.style.top = `${(ENTITY_SIZE * this.position.column)}px`;
+    this.element.style.left = `${(ENTITY_SIZE * this.position.row)}px`; 
+}
+update() {/*- update (function)
   - parameters: none
-  - Updates the player's HTML element position based on its position property and ENTITY_SIZE
-- moveToPosition (Position)
+  - Updates the player's HTML element position based on its position property and ENTITY_SIZE*/
+
+}
+/*- moveToPosition (Position)
   - moves to position specified unless it is a Wall entity.
   - updates player (update method)
 - move (function)
@@ -59,6 +81,8 @@ Player class definition. Player is a Creature
   - Increments level, sets hp to max hp
   - updates strength (level * 10) and attack speed (3000 / level)
   - plays levelup sound
-Example use:
-new Player('Van', new Position(5, 5), new Board(10, 10), 1, [new Potion(0)]);
+
 */
+
+    
+}

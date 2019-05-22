@@ -19,3 +19,4 @@ const MONSTER_NAMES = [
 ];
 const MAX_MONSTERS = 8;
 const ENTITY_SIZE = 32;
+const MAX_GRASS = 3;
