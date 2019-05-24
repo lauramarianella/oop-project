@@ -34,18 +34,56 @@ render(root) {/* - render (function)
     root.appendChild(this.element);
     this.element.style.top = `${(ENTITY_SIZE * this.position.column)}px`;
     this.element.style.left = `${(ENTITY_SIZE * this.position.row)}px`; 
+    this.element.style.zIndex = '100';
+    this.update();
 }
 update() {/*- update (function)
   - parameters: none
   - Updates the player's HTML element position based on its position property and ENTITY_SIZE*/
-
+    this.element.style.top = `${(ENTITY_SIZE * this.position.column)}px`;
+    this.element.style.left = `${(ENTITY_SIZE * this.position.row)}px`;     
 }
-/*- moveToPosition (Position)
+
+moveToPosition(position) {/**- moveToPosition (Position)
   - moves to position specified unless it is a Wall entity.
-  - updates player (update method)
-- move (function)
+  - updates player (update method)*/
+  if (board.isAWall(position)) return;
+
+  board.setEntity(this, position);
+  this.update();
+}
+move(direction) {/** - move (function)
   - parameters: direction (string)
-  - Sets the player image based on direction and moves to new position
+  - Sets the player image based on direction and moves to new position*/
+  let positionNew = this.position;
+  switch (direction){
+    case 'l':
+        this.element.src = 'imgs/player/left.png';        
+        positionNew.row=positionNew.row-1;
+        this.moveToPosition(positionNew);        
+        break;
+    case 'r':
+        this.element.src = 'imgs/player/right.png';
+        positionNew.row=positionNew.row+1;
+        this.moveToPosition(positionNew);
+        break;
+    case 'u':
+        this.element.src = 'imgs/player/back.png';
+        positionNew.column=positionNew.column-1;
+        this.moveToPosition(positionNew);
+        break;
+    case 'd':
+        this.element.src = 'imgs/player/front.png';
+        positionNew.column=positionNew.column+1;
+        this.moveToPosition(positionNew);
+        break;
+    default:
+      break;
+  }
+}
+
+
+/*
 - pickup (function)
   - parameters: entity (Item || Gold)
   - Adds item or gold and plays the corresponding sound ('loot' or 'gold' respectively)

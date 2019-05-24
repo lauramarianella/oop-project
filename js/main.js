@@ -46,40 +46,68 @@ run();
 //updateActionCam();
 
 // board entities
+let boardEntitiesArray = [];
 
 // monsters
-
 // Create all the monsters entities and set them on the board at a random position
 // Give each monster a random name, random level (1-3), a potion (random rarity 0-3), random gold (0-50)
 // Give one monster the key
-let monstersArray = [];
+
 for (let i = 0; i < MAX_MONSTERS; i++) {
   let name = MONSTER_NAMES[getRandom(0, MAX_MONSTERS)];
   let level = getRandom(1,3);
   let rarity = getRandom(0,3);
   let items = [new Potion(rarity)];
   let gold = getRandom(0,50);
-  monstersArray.push(new Monster(name, level,items, gold));
-  let x = getRandom(1, board.getRowsLength()-2);
-  let y = getRandom(1, board.getColsLength()-2);
-  let positionMonster = new Position(x, y);
-  board.setEntity(monstersArray[i],positionMonster);
-}
+  boardEntitiesArray.push(new Monster(name, level,items, gold));
 
-board.update();
+  let positionMonster = getRandomPosition(board);
+  board.setEntity(boardEntitiesArray[i],positionMonster);
+}
 
 // items
 // Add code to create a potion and a bomb entity and set them at a random board position
+let potion = new Potion(getRandom(0,3));
+board.setEntity(potion, getRandomPosition(board));
+boardEntitiesArray.push(potion);
+
+let bomb = new Bomb(getRandom(0,3));
+board.setEntity(bomb, getRandomPosition(board));
+boardEntitiesArray.push(bomb);
 
 // gold
 // Add code to create a gold entity and place it at a random position on the board
+let gold = new Gold(getRandom(0,50));
+board.setEntity(gold, getRandomPosition(board));
+boardEntitiesArray.push(gold);
 
 // dungeons
 // Add code for an opened dungeon and a closed dungeon you can loot (random position)
+let dungeonOpened = new Dungeon(true, false, 50, []);//(isOpen = false, hasPrincess = false, gold = 0, items = [])
+board.setEntity(dungeonOpened, getRandomPosition(board));
+boardEntitiesArray.push(dungeonOpened);
+
+let dungeonClosed = new Dungeon(false, false, 100, []);//(isOpen = false, hasPrincess = false, gold = 0, items = [])
+board.setEntity(dungeonClosed, getRandomPosition(board));
+boardEntitiesArray.push(dungeonClosed);
+
 // Add code for a dungeon that is closed and has the princess (random position)
+let dungeonClosedWithPrincess = new Dungeon(false, true, 0, []);//(isOpen = false, hasPrincess = false, gold = 0, items = [])
+board.setEntity(dungeonClosedWithPrincess, getRandomPosition(board));
+boardEntitiesArray.push(dungeonClosedWithPrincess);
 
 // tradesman
 // Add code for a tradesman with a potion of each rarity (0 to 3), bomb of each rarity and a key at a random position
+let itemsTradesmanPotions = ITEM_RARITIES.map((rarity) => new Potion(rarity));
+let itemsTradesmanBombs = ITEM_RARITIES.map((rarity) => new Bomb(rarity));
+let itemsTradesman = itemsTradesmanPotions.concat(itemsTradesmanBombs);
+itemsTradesman.push(new Key());
+let tradesman = new Tradesman(itemsTradesman);
+board.setEntity(tradesman, getRandomPosition(board));
+boardEntitiesArray.push(tradesman);
+
+board.update();
+
 
 // event handlers
 
@@ -87,18 +115,43 @@ let monsterAttack;
 // UPDATE this event listener to move the player
 // Add code to check if the entity at the new player position (after move) is a monster. If so, call the encounterMonster function
 document.addEventListener('keydown', (ev) => {
+  //alert(ev.code);alert(ev.key);
   if (!ev.key.includes('Arrow') || GAME_STATE === 'GAME_OVER') return;
   if (sounds.bg.paused) playMusic('bg');
-  clearInterval(monsterAttack); // stop monster attack when player moves
+  //clearInterval(monsterAttack); // stop monster attack when player moves
+  
+  if(ev.key === "ArrowLeft"){
+    player.move('l');
+  }
+  if(ev.key === "ArrowRight"){
+    player.move('r');
+  }
 
-  updateActionCam();
+  if(ev.key === "ArrowUp"){
+    player.move('u');
+  }
+  if(ev.key === "ArrowDown"){
+    player.move('d');
+  }
+
+
+  //updateActionCam();
 });
 
 // helper functions
 
 // UPDATE the function to return a random position on the board that is not occupied by an entity (Grass is fine) or the player's initial position (center)
 // The parameter is a Board object
-function getRandomPosition(board) {}
+function getRandomPosition(board) {
+  let newPosition = undefined;
+  let isPositionEmpty = false;
+
+  while(isPositionEmpty === false ){
+    newPosition = board.getRandomPosition();
+    isPositionEmpty = board.isPositionEmpty(newPosition);
+  }
+  return newPosition;
+}
 
 
 // UPDATE the function passed to setInterval to attack the player and trigger player death if hp is 0 or lower

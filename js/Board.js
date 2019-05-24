@@ -80,25 +80,46 @@ class Board{/** Example use:
     getEntity(position) {/** - getEntity (function)
          - parameters: position (Position)
         - returns the Entity at the specified position */
-        let entity = (this.rows[position.row][position.column])[position.column.length-1];
+        let entity = (this.rows[position.row][position.column])[(this.rows[position.row][position.column]).length-1];
         return entity;
     }
 
     getCenteredPosition() {
-        let x = Math.floor(this.getRowsLength()/2);
+        let x = Math.floor(this.getHeight()/2);
 
-        let y = Math.floor(this.getColsLength()/2);
+        let y = Math.floor(this.getWidth()/2);
 
         //alert(`x=${x} out of ${this.rows.length} , y=${y} out of ${this.rows[0].length}`);
         return new Position(x,y);
     }
 
-    getRowsLength(){
+    getHeight(){//x
         return this.rows.length;
     }
-    getColsLength(){
+    getWidth(){//y
         return this.rows[0].length;
     }
+    isPositionEmpty(position) {
+       let entity = this.getEntity(position);
+       if (entity instanceof Wall || entity instanceof Grass)  return true;
+       return false;
+   }
+   getRandomPosition(){
+    let x = getRandom(1, this.getHeight()-2);
+    let y = getRandom(1, this.getWidth()-2);
+    return new Position(x, y);
+  }
+  isAWall(position) {
+    /*let entity = this.getEntity(position);
+    if (entity instanceof Wall)  return true;
+    return false;*/
+
+    if(position.row <=0 || position.row >= this.getHeight()-1 || position.column<=0 || position.column >= this.getWidth()-1 ){
+        return true;
+    }
+    return false;
+  }
+
 
 }
 /*
