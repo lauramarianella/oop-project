@@ -80,8 +80,19 @@ class Board{/** Example use:
     getEntity(position) {/** - getEntity (function)
          - parameters: position (Position)
         - returns the Entity at the specified position */
-        let entity = (this.rows[position.row][position.column])[(this.rows[position.row][position.column]).length-1];
-        return entity;
+        if((this.rows[position.row][position.column]).length>=3){//in [0] Grass or Wall, [1] Entity, [2] Player
+            let entity = (this.rows[position.row][position.column])[(this.rows[position.row][position.column]).length-2];
+            return entity;
+        }else{//else return the Grass or Wall
+            let entity = (this.rows[position.row][position.column])[0];
+            return entity;
+        }
+    }
+
+    deleteEntity(position){
+        let entity = this.getEntity(position);
+        entity.position = null;
+        this.root.removeChild(entity.element);
     }
 
     getCenteredPosition() {
@@ -119,7 +130,6 @@ class Board{/** Example use:
     }
     return false;
   }
-
 
 }
 /*

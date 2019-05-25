@@ -46,10 +46,19 @@ Example use: not used by itself.
     attack(entity) {/**- attack (function)
         - parameters: entity (Creature)
         - hits the entity with strength value
-        - sets an attack timeout that expires after attackSpeed. While the timeout is active, this method immediately returns false, else returns true. */
-        
-        this.entity -= this.strength;
-        //setTimeout(this.attack,this.attackSpeed);
+        - sets an attack timeout that expires after attackSpeed. While the timeout is active, this method immediately returns false, 
+        else returns true. */
+        entity.hp -=  this.strength;
+        entity.hp = Math.max(0,entity.hp);
+
+        console.log(`Attacker: ${this.name} , ${this.hp}`);
+        console.log(`Victim: ${entity.name}, ${entity.hp}`);
+
+        this.attackTimeOut = setTimeout(()=>{
+            this.attackTimeOut = null;
+        }, entity.attackSpeed);
+
+        return true;
     }
 }
 
@@ -68,17 +77,13 @@ new Monster('Anti Fairy', 1, [], 0); // Creates a Monster named Anti Fairy, leve
         let nameFile = name.split(' ').join('');
         nameFile = `imgs/monsters/${nameFile}.gif`;
 
-        super(name, nameFile, level, items, gold);   
-
-        this.sound = new Audio('sounds/mattack.mp3');
-
+        super(name, nameFile, level, items, gold);
         //console.log(this);
     }
 
     attack(entity) {/**- attack (function)
         - parameters: entity (Creature)
         - calls the attack method from Creature (use super) and plays the 'mattack' sound if the attack was successful */
-        super.attack();
-        this.sound.play();
+        if(super.attack(entity)) playSound('mattack');
     }
 }

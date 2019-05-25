@@ -17,6 +17,6 @@ const MONSTER_NAMES = [
   'Rope',
   'Wizzrobe Fire',
 ];
-const MAX_MONSTERS = 8;
+const MAX_MONSTERS = 1;
 const ENTITY_SIZE = 32;
 const MAX_GRASS = 3;

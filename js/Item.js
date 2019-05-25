@@ -34,7 +34,6 @@ new Potion(0) // potion rarity 0
 */
     constructor(rarity){
         super((rarity + 1) * 10,rarity,'potion');
-        this.sound = new Audio('sounds/potion.mp3');
     }
 
     
@@ -44,7 +43,7 @@ new Potion(0) // potion rarity 0
         - Plays the item sound */
         target.hp += this.value;
         target.hp = Math.min(target.maxHp,target.hp);
-        this.sound.play();
+        playSound('potion');
     }
 }
 
@@ -60,8 +59,7 @@ Example use:
 new Bomb(0) // bomb rarity 0
 */
     constructor(rarity){
-        super((rarity + 1) * 20 , rarity , 'bomb');
-        this.sound = new Audio('sounds/bomb.mp3');        
+        super((rarity + 1) * 20 , rarity , 'bomb');             
     }
 
     use(target) {/** - use (function)
@@ -70,7 +68,7 @@ new Bomb(0) // bomb rarity 0
         - Plays the item sound*/
         target.hp -= this.value;
         target.hp = Math.max(0,target.hp);
-        this.sound.play();
+        playSound('bomb');
     }
 }
 
@@ -84,14 +82,13 @@ Example use:
 new Key(0) // bomb rarity 0
 */
     constructor(){
-        super(100,3,'key');
-        this.sound = new Audio('sounds/key.mp3');   
+        super(100,3,'key');           
     }
 
     use(target){/**- use (function)
         - parameters: target (Dungeon)
         - opens the dungeon and plays the item sound if the dungeon does not have the princess */
-        this.sound.play();
+        playSound('key');
     }
 
 }

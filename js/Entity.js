@@ -8,7 +8,7 @@ class Entity{/**Example use: not used by itself.  */
       - element (HTMLElement): HTML element for the entity (img element) */
         this.element = document.createElement('img');
         this.element.src = src;
-        this.element.style.position = 'absolute';
+        this.element.style.position = 'fixed';        
     }
 
     setImg(src) {/**- setImg (function)
