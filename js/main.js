@@ -28,14 +28,14 @@ let player;
 
 // init board
 // Create a board with 20 rows and 25 columns (can play around to test different sizes) and render it
-board = new Board(15, 15);
+board = new Board(20, 25);
 let root = document.getElementById('board');
 board.render(root);
 
 // init player
 // create player at the center of the board with 2 items and render it
 let positionPlayer = board.getCenteredPosition();
-let itemsPlayer = [new Potion(3), new Bomb(2), new Key()];
+let itemsPlayer = [new Potion(3), new Bomb(3)];
 player = new Player('HooperCat', positionPlayer, board, 1, itemsPlayer,5);
 board.setEntity(player,positionPlayer);
 player.render(root);
@@ -56,13 +56,14 @@ for (let i = 0; i < MAX_MONSTERS; i++) {
   let name = MONSTER_NAMES[getRandom(0, MAX_MONSTERS)];
   let level = getRandom(1,3);
   let rarity = getRandom(0,3);
-  let items = [new Potion(rarity)];
+  let items = [new Potion(rarity), new Bomb(getRandom(0,3))];
   let gold = getRandom(0,50);
   boardEntitiesArray.push(new Monster(name, level,items, gold));
 
   let positionMonster = getRandomPosition(board);
   board.setEntity(boardEntitiesArray[i],positionMonster);
 }
+boardEntitiesArray[MAX_MONSTERS-1].items.push(new Key());
 
 // items
 // Add code to create a potion and a bomb entity and set them at a random board position
@@ -82,16 +83,16 @@ boardEntitiesArray.push(gold);
 
 // dungeons
 // Add code for an opened dungeon and a closed dungeon you can loot (random position)
-let dungeonOpened = new Dungeon(true, false, 50, [new Potion(0)]);//(isOpen = false, hasPrincess = false, gold = 0, items = [])
+let dungeonOpened = new Dungeon(true, false, 50, [new Bomb(3)]);//(isOpen = false, hasPrincess = false, gold = 0, items = [])
 board.setEntity(dungeonOpened, getRandomPosition(board));
 boardEntitiesArray.push(dungeonOpened);
 
-let dungeonClosed = new Dungeon(false, false, 100, [new Potion(1)]);//(isOpen = false, hasPrincess = false, gold = 0, items = [])
+let dungeonClosed = new Dungeon(false, false, 100, [new Potion(3)]);//(isOpen = false, hasPrincess = false, gold = 0, items = [])
 board.setEntity(dungeonClosed, getRandomPosition(board));
 boardEntitiesArray.push(dungeonClosed);
 
 // Add code for a dungeon that is closed and has the princess (random position)
-let dungeonClosedWithPrincess = new Dungeon(false, true, 0, [new Bomb(2)]);//(isOpen = false, hasPrincess = false, gold = 0, items = [])
+let dungeonClosedWithPrincess = new Dungeon(false, true, 200, [new Bomb(2)]);//(isOpen = false, hasPrincess = false, gold = 0, items = [])
 board.setEntity(dungeonClosedWithPrincess, getRandomPosition(board));
 boardEntitiesArray.push(dungeonClosedWithPrincess);
 
@@ -256,7 +257,7 @@ function createCreatureView(root, creature) {
   const gold = document.createElement('h4');
   gold.innerText = `Gold: ${creature.gold}`;// Add code here to set the gold text to the creature's gold e.g. "Gold: 10"
   const exp = document.createElement('h4');
-  exp.innerText = `Exp: ${creature.exp}`;
+  if(creature instanceof Player) exp.innerText = `Exp: ${creature.exp}`;
   root.appendChild(hp);
   root.appendChild(level);
   root.appendChild(gold);
