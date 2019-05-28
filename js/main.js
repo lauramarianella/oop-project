@@ -54,24 +54,15 @@ let boardEntitiesArray = [];
 
 for (let i = 0; i < MAX_MONSTERS; i++) {
   let name = MONSTER_NAMES[getRandom(0, MAX_MONSTERS)];
-  let level = 1;//getRandom(1,3);
+  let level = getRandom(1,3);
   let rarity = getRandom(0,3);
   let items = [new Potion(rarity)];
   let gold = getRandom(0,50);
   boardEntitiesArray.push(new Monster(name, level,items, gold));
 
-  let positionMonster = new Position(i+2,5);//getRandomPosition(board);
+  let positionMonster = getRandomPosition(board);
   board.setEntity(boardEntitiesArray[i],positionMonster);
 }
-
- name = MONSTER_NAMES[getRandom(0, MAX_MONSTERS)];
-  let level = 2;//getRandom(1,3);
-  let rarity = getRandom(0,3);
-  let items = [new Potion(rarity)];
-  boardEntitiesArray.push(new Monster(name, level,items, 100));
-
-   positionMonster = new Position(10,5);//getRandomPosition(board);
-   boardEntitiesArray.push(positionMonster);
 
 // items
 // Add code to create a potion and a bomb entity and set them at a random board position
