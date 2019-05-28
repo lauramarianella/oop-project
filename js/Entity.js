@@ -86,8 +86,7 @@ class Dungeon extends Entity{/*
     new Dungeon(true, false, 30, [new Potion(2), new Bomb(2)]);
     */
     constructor(isOpen = false, hasPrincess = false, gold = 0, items = []){
-        let src = '';
-        (isOpen) ? 'imgs/dungeon/open.png': 'imgs/dungeon/closed.png';//ask the other options loot...
+        let src = (isOpen) ? 'imgs/dungeon/open.png': 'imgs/dungeon/closed.png';//ask the other options loot...
         super(src);
 
         this.isOpen = isOpen;

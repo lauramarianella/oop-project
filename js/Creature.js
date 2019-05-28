@@ -34,7 +34,7 @@ Example use: not used by itself.
     getMaxHp() {/**- getMaxHp (function)
         - parameters: none
         - returns max hp (level * 100) */
-        returns (this.level * 100);
+        return (this.level * 100);
     }
 
     hit(val) {/**- hit (function)
@@ -51,12 +51,13 @@ Example use: not used by itself.
         entity.hp -=  this.strength;
         entity.hp = Math.max(0,entity.hp);
 
-        console.log(`Attacker: ${this.name} , ${this.hp}`);
-        console.log(`Victim: ${entity.name}, ${entity.hp}`);
+        // console.log(`Attacker: ${this.name} , ${this.hp}`);
+        // console.log(`Victim: ${entity.name}, ${entity.hp}`);
 
         this.attackTimeOut = setTimeout(()=>{
             this.attackTimeOut = null;
-        }, entity.attackSpeed);
+            return false;
+        }, this.attackSpeed);
 
         return true;
     }

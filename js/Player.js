@@ -50,13 +50,14 @@ moveToPosition(position) {/**- moveToPosition (Position)
   - updates player (update method)*/
   if (board.isAWall(position)) return;
 
-  board.setEntity(this, position);
+  board.popPlayer(this.position);
+  board.setEntity(this, position); 
   this.update();
 }
 move(direction) {/** - move (function)
   - parameters: direction (string)
   - Sets the player image based on direction and moves to new position*/
-  let positionNew = this.position;
+  let positionNew = new Position(this.position.row, this.position.column);
   switch (direction){
     case 'l':
         this.element.src = 'imgs/player/left.png';        
@@ -89,9 +90,9 @@ pickup(entity) {/**- pickup (function)
   - Adds item or gold and plays the corresponding sound ('loot' or 'gold' respectively)
   */
   if(entity instanceof Item)  {
-    this.items.concat(item);
+    this.items = this.items.concat(entity);
     playSound('loot');
-  }else{
+  }else if(entity instanceof Gold) {
     this.gold += gold.value;
     playSound('gold');
   }
@@ -108,9 +109,11 @@ pickup(entity) {/**- pickup (function)
   - updates gold and items for both player and tradesman.
   - Plays the trade sound
   - returns true if successful trade, false if gold is insufficient*/
-  if(this.value >= item.value) {
+  if(this.gold >= item.value) {
     tradesman.gold += item.value;
+    this.gold -= item.value;
     this.items = this.items.concat(item);
+    remove(tradesman.items, item);
     return true;
   }
   return false;
@@ -123,6 +126,7 @@ pickup(entity) {/**- pickup (function)
   - returns true if successful trade, false if gold is insufficient*/
   this.gold += item.value;
   tradesman.items = tradesman.items.concat(item);
+  remove(this.items, item);
   return true;
 }
 
@@ -130,13 +134,16 @@ useItem(item, target) {/** - useItem (function)
   - parameters: item (Item), target (Creature)
   - uses the item on the target and removes it from the player*/
   item.use(target);
+  remove(this.items,item);
 } 
 loot(entity) {/*- loot (function)
   - parameters: entity (Monster || Dungeon)
   - Updates gold and items for both player and dungeon or monster.
   - plays the loot sound*/
   this.gold += entity.gold;
+  entity.gold = 0;
   this.items = this.items.concat(entity.items);
+  entity.items = [];
   playSound('loot');
 }
 
@@ -153,7 +160,10 @@ getExp(entity) {/** - getExp (function)
   - adds exp based on entity level (level * 10)
   - level up if enough exp. It is possible to level up multiple times at once if enough exp is earned (e.g. beat enemy level 3)
 */
-  this.exp = entity.level * 10;
+  this.exp += entity.level * 10;
+  if(this.exp >= this.getExpToLevel()) {
+    this.levelUp(entity);
+  }
 }
 
 levelUp(entity){/**- levelUp (function)
@@ -161,10 +171,11 @@ levelUp(entity){/**- levelUp (function)
   - Increments level, sets hp to max hp
   - updates strength (level * 10) and attack speed (3000 / level)
   - plays levelup sound*/
-  this.level ++;
+  this.level = Math.max(this.level+1,entity.level);
   this.hp = this.getMaxHp();
   this.strength = this.level *10;
   this.attackSpeed = 3000/this.level;
+  playSound('levelup');
 }
 
 }

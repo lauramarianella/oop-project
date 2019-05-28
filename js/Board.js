@@ -87,12 +87,17 @@ class Board{/** Example use:
             let entity = (this.rows[position.row][position.column])[0];
             return entity;
         }
-    }
+    }    
 
     deleteEntity(position){
         let entity = this.getEntity(position);
-        entity.position = null;
+        entity.position = null;//console.log('Board.js Deleting Entity:');console.log(entity);
+        (this.rows[position.row][position.column]).splice(2,1);
         this.root.removeChild(entity.element);
+    }
+    
+    popPlayer(position){
+        (this.rows[position.row][position.column]).pop();
     }
 
     getCenteredPosition() {

@@ -42,7 +42,7 @@ new Potion(0) // potion rarity 0
         - Restores hp of target by potency value. HP of target can't go past its max HP.
         - Plays the item sound */
         target.hp += this.value;
-        target.hp = Math.min(target.maxHp,target.hp);
+        target.hp = Math.min(target.getMaxHp(),target.hp);
         playSound('potion');
     }
 }
